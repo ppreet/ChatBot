@@ -6,8 +6,12 @@ import requests
 import json
 
 #Application Variables
-request_page = "https://maps.googleapis.com/maps/api/geocode/json"
-API_KEY = "AIzaSyCR57ivdKJzwKiTQOn0yZEqgy2g6re-q5w"
+#https://developers.google.com/maps/documentation/geocoding/intro
+goog_request_page = "https://maps.googleapis.com/maps/api/geocode/json"
+GOOG_API_KEY = "AIzaSyCR57ivdKJzwKiTQOn0yZEqgy2g6re-q5w"
+#https://darksky.net/dev/
+DS_API_KEY = "4f43e470ffd89f1410ad770ee1385099"
+ds_request_page = "https://api.darksky.net/forecast/" + DS_API_KEY + "/"
 
 # kernel is responsible for responding to users
 kernel = aiml.Kernel()
@@ -22,9 +26,9 @@ for file in files:
 def google_request(city):
 
     #Send request to Google for location
-    location = requests.get(request_page, params={
+    location = requests.get(goog_request_page, params={
         "address": city,
-        "key": API_KEY
+        "key": GOOG_API_KEY
     })
     loc_json = json.loads(location.text)
 
@@ -40,7 +44,12 @@ def google_request(city):
 
 #Weather request:
 def darksky_request(lat, lng):
-    pass
+
+    weather = requests.get(ds_request_page + str(lat) + "," + str(lng))
+    weather_json = json.loads(weather.text)
+
+    return weather_json
+
 
 #Teach AI
 def response1(first):
@@ -52,7 +61,15 @@ def response1(first):
     if(loc[0] == 0):
         return "Is {} a city?".format(first)
 
-    return 'Who gives a shit {}'.format(first)
+    #Make DarkSky request for weather
+    weather = darksky_request(loc[1], loc[2])
+    
+    #Parse response
+    try:
+        current = weather["currently"]
+        return 'In {}, it is '.format(first) + str(current["temperature"]) + " and " + current["summary"]
+    except:
+        return "Sorry, I don't know"
 kernel.addPattern("What's the weather like in {first}?", response1)
 
 def response2(first, second):
@@ -64,7 +81,31 @@ def response2(first, second):
     if(loc[0] == 0):
         return "Is {} a city?".format(second)
 
-    return "hahahaa {} haha {}".format(first, second)
+    #Make DarkSky request for weather
+    weather = darksky_request(loc[1], loc[2])
+
+    #Parse response
+    try:
+        #Dictionary search term
+        search = ""
+        if(first == "hot"):
+            search = "temperatureMax"
+        else:
+            search = "temperatureMin"
+
+        week_data = weather["daily"]["data"]
+        week_temps = [x[search] for x in week_data]
+        print week_temps
+
+        extreme = 0.0
+        if(first == "hot"):
+            extreme = max(week_temps)
+        else:
+            extreme = min(week_temps)
+
+        return "In {}, ".format(second) + " it will reach " + str(extreme)
+    except:
+        return "Sorry, I don't know"
 kernel.addPattern("How {first} will it get in {second} this week?", response2)
 
 def response3(first):
@@ -76,7 +117,12 @@ def response3(first):
     if(loc[0] == 0):
         return "Is {} a city?".format(first)
 
-    return "lololo {}".format(first)
+    #Make DarkSky request for weather
+    weather = darksky_request(loc[1], loc[2])
+
+    #Parse response
+    
+    return "hi"
 kernel.addPattern("Is it going to rain in {first} this week?", response3)
 
 
@@ -90,3 +136,6 @@ while(True):
         break
 
     print "{}".format(kernel.respond(inp))
+
+
+#Powered by Dark Sky: https://darksky.net/poweredby/

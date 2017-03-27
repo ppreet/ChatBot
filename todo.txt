@@ -6,6 +6,13 @@ Caching
 
 Requests
 
-API failures
+IMPORTANT: API failures: Where exactly does this occur? When parsing reponse or when making requests?
+In other words, are we guaranteed to receive a response?
 
 Readme
+
+Dark Sky API link (Powered by)
+
+DS Api: Do you want the "Apparent Temp"? or the actual temperature?
+Where does the current weather description come from: summary or icon?
+
