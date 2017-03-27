@@ -1,0 +1,11 @@
+To Do:
+
+Test
+
+Caching
+
+Requests
+
+API failures
+
+Readme
