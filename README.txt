@@ -1,7 +1,51 @@
-Written by Preet Patel (ppreet) for SI 106 Final Project, Winter 2016
+Written by Preet Patel (ppreet) for SI 106 Final Project, Winter 2017
 UMID: 56314371
+
+---INSTRUCTIONS---
+
+The chatbot can be run using the command: "python chatbot.py". Note that this works only with Python2.
+
+Besides the interactions provided by the AIML templates, the chatbot can answer four other queries for the purpose of this project. These are:
+1) "What's the weather like in SOMECITY?"
+2) "Is it going to rain in SOMECITY this week?"
+3) "How cold will it get in SOMECITY this week?"
+4) "How hot will it get in SOMECITY this week?"
+
+Moreover, the chatbot supports caching. This means that once a request has been made, it will be stored locally (even across sessions). This will make response time to duplicate queries fast.
+
+The chatbot can be exited by entering the input "exit".
+
+
+---SAMPLE INTERACTIONS (ON 31, MARCH 2017)---
+(These may vary, since live data is involved)
+
+Query:    "What's the weather like in Paris?"
+Response: "In Paris, it is 46.29 and Windy and Partly Cloudy"
+
+Query:    "How cold will it get in Mumbai this week?"
+Response: "In Mumbai, it will reach 74.98"
+
+Query:    "Is it going to rain in Tokyo this week?"
+Response: "It probably will rain in Tokyo"
+
+Query:    "exit"
+Response: ChatBot exits
+
+
+---OTHER INFORMATION FOR GRADERS---
+
+API Failure information: 
+    Error messages will be displayed in cases:
+        1) Error Message: "Is SOMECITY a city?"
+            - If the request to the Google Geocoding API fails
+            - If the Google Geocoding API returns a response, but it is either incomplete or lacking (mostly because the input city was invalid)
+
+        2) Error Message: "Sorry, I don't know"        
+            - If the request to the DarkSky API fails
+            - If the DarkSky API returns a response, but it is either incomplete or lacking
+    No other error is accounted for.
+
 
 
 ADD:
-- Instructions on how to run your submission
 - Anything else that we need to know to grade your submission

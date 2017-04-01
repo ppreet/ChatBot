@@ -25,28 +25,35 @@ for file in files:
 #Location Request, returns a list: [status, lat, lng]
 def google_request(city):
 
-    #Send request to Google for location
-    location = requests.get(goog_request_page, params={
-        "address": city,
-        "key": GOOG_API_KEY
-    })
-    loc_json = json.loads(location.text)
+    try:
+        #Send request to Google for location
+        location = requests.get(goog_request_page, params={
+            "address": city,
+            "key": GOOG_API_KEY
+        })
+        loc_json = json.loads(location.text)
 
-    #Check if the Google API fails
-    if(loc_json["status"] != "OK"):
+        #Check if the Google API fails
+        if(loc_json["status"] != "OK"):
+            return [0, 0, 0]
+
+        #Isolate lat and lng
+        lat = loc_json["results"][0]["geometry"]["location"]["lat"]
+        lng = loc_json["results"][0]["geometry"]["location"]["lng"]
+
+    except:
         return [0, 0, 0]
-
-    #Isolate lat and lng
-    lat = loc_json["results"][0]["geometry"]["location"]["lat"]
-    lng = loc_json["results"][0]["geometry"]["location"]["lng"]
 
     return [1, lat, lng]
 
-#Weather request:
+#Weather request: returns the entire response json object
 def darksky_request(lat, lng):
 
-    weather = requests.get(ds_request_page + str(lat) + "," + str(lng))
-    weather_json = json.loads(weather.text)
+    try:
+        weather = requests.get(ds_request_page + str(lat) + "," + str(lng))
+        weather_json = json.loads(weather.text)
+    except:
+        return "API REQUEST FAILED"
 
     return weather_json
 
@@ -63,6 +70,10 @@ def response1(first):
 
     #Make DarkSky request for weather
     weather = darksky_request(loc[1], loc[2])
+
+    #Error check
+    if(weather == "API REQUEST FAILED"):
+        return "Sorry, I don't know"
     
     #Parse response
     try:
@@ -84,6 +95,10 @@ def response2(first, second):
     #Make DarkSky request for weather
     weather = darksky_request(loc[1], loc[2])
 
+    #Error check
+    if(weather == "API REQUEST FAILED"):
+        return "Sorry, I don't know"
+
     #Parse response
     try:
         #Dictionary search term
@@ -95,7 +110,7 @@ def response2(first, second):
 
         week_data = weather["daily"]["data"]
         week_temps = [x[search] for x in week_data]
-        print week_temps
+        #print week_temps
 
         extreme = 0.0
         if(first == "hot"):
@@ -103,7 +118,7 @@ def response2(first, second):
         else:
             extreme = min(week_temps)
 
-        return "In {}, ".format(second) + " it will reach " + str(extreme)
+        return "In {},".format(second) + " it will reach " + str(extreme)
     except:
         return "Sorry, I don't know"
 kernel.addPattern("How {first} will it get in {second} this week?", response2)
@@ -119,10 +134,36 @@ def response3(first):
 
     #Make DarkSky request for weather
     weather = darksky_request(loc[1], loc[2])
+    #print json.dumps(weather["daily"], indent = 4)
+
+    #Error check
+    if(weather == "API REQUEST FAILED"):
+        return "Sorry, I don't know"
 
     #Parse response
-    
-    return "hi"
+    try:
+
+        product = 1
+        daily = weather["daily"]
+        #print json.dumps(daily["data"], indent=4)
+        for i in range(7):
+            #print daily["data"][i]["precipProbability"]
+            product = product*(1 - daily["data"][i]["precipProbability"])
+        
+        rain_prob = 1 - product
+
+        #Return statements
+        if(rain_prob < 0.1):
+            return "It will definitely not rain in {}".format(first)
+        elif(rain_prob < 0.5):
+            return "It probably will not rain in {}".format(first)
+        elif(rain_prob < 0.9):
+            return "It probably will rain in {}".format(first)
+        else:
+            return "It will definitely rain in {}".format(first)
+
+    except:
+        return "Sorry, I don't know"
 kernel.addPattern("Is it going to rain in {first} this week?", response3)
 
 
