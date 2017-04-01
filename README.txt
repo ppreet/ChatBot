@@ -5,13 +5,13 @@ UMID: 56314371
 
 The chatbot can be run using the command: "python chatbot.py". Note that this works only with Python2.
 
-Besides the interactions provided by the AIML templates, the chatbot can answer four other queries for the purpose of this project. These are:
+Besides the interactions pre-loaded in the AIML templates, the chatbot can answer four other queries for the purpose of this project. These are:
 1) "What's the weather like in SOMECITY?"
 2) "Is it going to rain in SOMECITY this week?"
 3) "How cold will it get in SOMECITY this week?"
 4) "How hot will it get in SOMECITY this week?"
 
-Moreover, the chatbot supports caching. This means that once a request has been made, it will be stored locally (even across sessions). This will make response time to duplicate queries fast.
+Moreover, the chatbot supports caching. This means that once a request has been made, it will be stored locally (even across sessions). This will make response time for duplicate queries fast.
 
 The chatbot can be exited by entering the input "exit".
 
@@ -34,7 +34,7 @@ Response: ChatBot exits
 
 ---OTHER INFORMATION FOR GRADERS---
 
-API Failure information: 
+A. API Failure information: 
     Error messages will be displayed in cases:
         1) Error Message: "Is SOMECITY a city?"
             - If the request to the Google Geocoding API fails
@@ -45,7 +45,4 @@ API Failure information:
             - If the DarkSky API returns a response, but it is either incomplete or lacking
     No other error is accounted for.
 
-
-
-ADD:
-- Anything else that we need to know to grade your submission
+B. The spec does not tell us where the equality lies in the "Computing Rain Probability" section intervals. I have arbitrarily assigned equality on the lower side. In other words, the intervals are: [0.0, 0.1), [0.1, 0.5), [0.5, 0.9), [0.9, inf).  

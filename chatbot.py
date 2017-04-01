@@ -27,24 +27,60 @@ for file in files:
 #Location Request, returns a list: [status, lat, lng]
 def google_request(city):
 
+    #Open cached file
     try:
-        #Send request to Google for location
-        location = requests.get(goog_request_page, params={
+        cache_file = open(CACHE_FNAME, 'r')
+        cache_contents = cache_file.read()
+        cache_file.close()
+        cache_diction = json.loads(cache_contents)
+    except:
+        cache_diction = {}
+
+    #Prepare for a request
+    parameters = {
             "address": city,
             "key": GOOG_API_KEY
-        })
-        loc_json = json.loads(location.text)
+    }
+    req = requests.Request(method = 'GET', url = goog_request_page, params = sorted(parameters.items()))
+    prepped = req.prepare()
+    fullURL = prepped.url
 
-        #Check if the Google API fails
-        if(loc_json["status"] != "OK"):
+    #If request is not in the cache, send request and update the cache_diction
+    if fullURL not in cache_diction:
+
+        try:
+            #Send request to Google for location
+            location = requests.Session().send(prepped)
+
+            loc_json = json.loads(location.text)
+
+            #Check if the Google API fails
+            if(loc_json["status"] != "OK"):
+                return [0, 0, 0]
+
+            #Isolate lat and lng
+            lat = loc_json["results"][0]["geometry"]["location"]["lat"]
+            lng = loc_json["results"][0]["geometry"]["location"]["lng"]
+
+            #Update cache (at the end of the function so that errors are handled)
+            cache_diction[fullURL] = location.text
+
+            #write the updated cache file
+            cache_file = open(CACHE_FNAME, 'w')
+            cache_file.write(json.dumps(cache_diction))
+            cache_file.close()
+
+            return [1, lat, lng]
+
+        except:
             return [0, 0, 0]
 
-        #Isolate lat and lng
-        lat = loc_json["results"][0]["geometry"]["location"]["lat"]
-        lng = loc_json["results"][0]["geometry"]["location"]["lng"]
+    #if the data is already in the cache, process it
+    loc_json = json.loads(cache_diction[fullURL])
 
-    except:
-        return [0, 0, 0]
+    #Isolate lat and lng - should never be an error here
+    lat = loc_json["results"][0]["geometry"]["location"]["lat"]
+    lng = loc_json["results"][0]["geometry"]["location"]["lng"]
 
     return [1, lat, lng]
 
@@ -181,13 +217,13 @@ def response3(first):
 
         #Return statements
         if(rain_prob < 0.1):
-            return "It will definitely not rain in {}".format(first)
+            return "It almost definitely will not rain in {}".format(first)
         elif(rain_prob < 0.5):
             return "It probably will not rain in {}".format(first)
         elif(rain_prob < 0.9):
             return "It probably will rain in {}".format(first)
         else:
-            return "It will definitely rain in {}".format(first)
+            return "It almost definitely will rain in {}".format(first)
 
     except:
         return "Sorry, I don't know"
