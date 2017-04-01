@@ -3,7 +3,7 @@ To Do:
 Test
 Run code by Prof. Oney
 
-Caching
+Caching: DS Done, Google left
 
 In computing rain probability, where does the equality lie?
 

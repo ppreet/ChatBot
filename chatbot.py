@@ -12,6 +12,8 @@ GOOG_API_KEY = "AIzaSyCR57ivdKJzwKiTQOn0yZEqgy2g6re-q5w"
 #https://darksky.net/dev/
 DS_API_KEY = "4f43e470ffd89f1410ad770ee1385099"
 ds_request_page = "https://api.darksky.net/forecast/" + DS_API_KEY + "/"
+#Cache file
+CACHE_FNAME = "cache.json"
 
 # kernel is responsible for responding to users
 kernel = aiml.Kernel()
@@ -49,14 +51,39 @@ def google_request(city):
 #Weather request: returns the entire response json object
 def darksky_request(lat, lng):
 
+    #Open cache file
     try:
-        weather = requests.get(ds_request_page + str(lat) + "," + str(lng))
-        weather_json = json.loads(weather.text)
+        cache_file = open(CACHE_FNAME, 'r')
+        cache_contents = cache_file.read()
+        cache_file.close()
+        cache_diction = json.loads(cache_contents)
     except:
-        return "API REQUEST FAILED"
+        cache_diction = {}
 
-    return weather_json
+    url = ds_request_page + str(lat) + "," + str(lng)
 
+    #Send request and update cache file if request not in cache
+    if url not in cache_diction:
+
+        try:
+            weather = requests.get(url)
+            weather_json = json.loads(weather.text)
+
+            #Update cache_diction
+            cache_diction[url] = weather.text
+
+            # write the updated cache file
+            cache_file = open(CACHE_FNAME, 'w')
+            cache_file.write(json.dumps(cache_diction))
+            cache_file.close()
+            
+        except:
+            return "API REQUEST FAILED"
+
+        return weather_json
+    
+    #Else, just return cached value
+    return json.loads(cache_diction[url])
 
 #Teach AI
 def response1(first):
