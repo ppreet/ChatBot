@@ -1,6 +1,6 @@
 To Do:
 
-Readme cache clarification
+Ask Oney in lecture if the cache needs to be maintained across sessions.
 
 Test
 Run code by Prof. Oney

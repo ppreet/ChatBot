@@ -45,4 +45,8 @@ A. API Failure information:
             - If the DarkSky API returns a response, but it is either incomplete or lacking
     No other error is accounted for.
 
-B. The spec does not tell us where the equality lies in the "Computing Rain Probability" section intervals. I have arbitrarily assigned equality on the lower side. In other words, the intervals are: [0.0, 0.1), [0.1, 0.5), [0.5, 0.9), [0.9, inf).  
+B. Computing Rain Probability:
+    The spec does not tell us where the equality lies in the "Computing Rain Probability" section intervals. I have arbitrarily assigned equality on the lower side. In other words, the intervals are: [0.0, 0.1), [0.1, 0.5), [0.5, 0.9), [0.9, inf).  
+
+C. Caching:
+    Both the Google Geocoding and the DarkSky APIs have been cached. This means that once a particular request has been made, the result will be cached. Although this makes the program faster, it has the side effect that the weather will not be updated if you make a duplicate query. This will persist even across sessions.
