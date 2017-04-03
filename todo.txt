@@ -1,6 +1,5 @@
 To Do:
 
-Ask Oney in lecture if the cache needs to be maintained across sessions.
+Ask Oney if the code can be made public after the class is over. Public on personal Github, I mean. 
 
 Test
-Run code by Prof. Oney
