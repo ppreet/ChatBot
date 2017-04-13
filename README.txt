@@ -51,4 +51,4 @@ B. Computing Rain Probability:
 
 C. Caching:
     Both the Google Geocoding and the DarkSky APIs have been cached. This means that once a particular request has been made, the result will be cached. Although this makes the program faster, it has the side effect that the weather will not be updated if you make a duplicate query. Note that this caching will persist even across sessions.
-    To clear the cache, either run the command "rm cache.json" in the terminal or delete the file "cache.json" from the directory.
+    To clear the cache, either run the command "rm cache.json" in the terminal or delete the file "cache.json" from the directory. Also note that queries that throw an error will not be cached. 
