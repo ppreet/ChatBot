@@ -19,6 +19,7 @@ CACHE_FNAME = "cache.json"
 kernel = aiml.Kernel()
 
 #Add files from aiml_data
+print "Educating the ChatBot..."
 files = os.listdir("aiml_data")
 for file in files:
     kernel.learn(os.path.join('aiml_data', file))
@@ -229,7 +230,8 @@ def response3(first):
         return "Sorry, I don't know"
 kernel.addPattern("Is it going to rain in {first} this week?", response3)
 
-
+#Begin Chatbot
+print "ChatBot Ready!"
 #Ask for input from user
 while(True):
 
