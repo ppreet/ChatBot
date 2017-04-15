@@ -246,7 +246,7 @@ def response3b(first):
     #Error check
     if(weather == "API REQUEST FAILED"):
         return "Sorry, I don't know"
-    print "TODAY MOFO"
+
     #Parse response
     try:
 
