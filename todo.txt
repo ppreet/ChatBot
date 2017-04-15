@@ -2,4 +2,8 @@ To Do:
 
 Ask Oney if the code can be made public after the class is over. Public on personal Github, I mean. 
 
-Test - spellcheck responses as well
+
+Google return code status check
+
+Add today to rain
+Add today to hot/cold

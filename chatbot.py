@@ -230,6 +230,45 @@ def response3(first):
         return "Sorry, I don't know"
 kernel.addPattern("Is it going to rain in {first} this week?", response3)
 
+def response3b(first):
+    
+    #Make Google request for location
+    loc = google_request(first)
+    
+    #If request failed
+    if(loc[0] == 0):
+        return "Is {} a city?".format(first)
+
+    #Make DarkSky request for weather
+    weather = darksky_request(loc[1], loc[2])
+    #print json.dumps(weather["daily"], indent = 4)
+
+    #Error check
+    if(weather == "API REQUEST FAILED"):
+        return "Sorry, I don't know"
+    print "TODAY MOFO"
+    #Parse response
+    try:
+
+        today = weather["daily"]["data"][0]
+        #print json.dumps(daily["data"], indent=4)
+        
+        rain_prob = float(today["precipProbability"])
+
+        #Return statements
+        if(rain_prob < 0.1):
+            return "It almost definitely will not rain in {}".format(first)
+        elif(rain_prob < 0.5):
+            return "It probably will not rain in {}".format(first)
+        elif(rain_prob < 0.9):
+            return "It probably will rain in {}".format(first)
+        else:
+            return "It almost definitely will rain in {}".format(first)
+
+    except:
+        return "Sorry, I don't know"
+kernel.addPattern("Is it going to rain in {first} today?", response3b)
+
 #Begin Chatbot
 print "ChatBot Ready!"
 #Ask for input from user
