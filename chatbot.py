@@ -187,6 +187,42 @@ def response2(first, second):
         return "Sorry, I don't know"
 kernel.addPattern("How {first} will it get in {second} this week?", response2)
 
+def response2b(first, second):
+
+    #Make Google request for location
+    loc = google_request(second)
+    
+    #If request failed
+    if(loc[0] == 0):
+        return "Is {} a city?".format(second)
+
+    #Make DarkSky request for weather
+    weather = darksky_request(loc[1], loc[2])
+
+    #Error check
+    if(weather == "API REQUEST FAILED"):
+        return "Sorry, I don't know"
+
+    #Parse response
+    try:
+        #Dictionary search term
+        search = ""
+        if(first == "hot"):
+            search = "temperatureMax"
+        else:
+            search = "temperatureMin"
+
+        today = weather["daily"]["data"][0]
+        #print json.dumps(today, indent=4)
+        #print week_temps
+
+        extreme = today[search]
+
+        return "In {},".format(second) + " it will reach " + str(extreme)
+    except:
+        return "Sorry, I don't know"
+kernel.addPattern("How {first} will it get in {second} today?", response2b)
+
 def response3(first):
     
     #Make Google request for location
