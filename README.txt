@@ -8,8 +8,11 @@ The chatbot can be run using the command: "python chatbot.py". Note that this wo
 Besides the interactions pre-loaded in the AIML templates, the chatbot can answer four other queries for the purpose of this project. These are:
 1) "What's the weather like in SOMECITY?"
 2) "Is it going to rain in SOMECITY this week?"
-3) "How cold will it get in SOMECITY this week?"
-4) "How hot will it get in SOMECITY this week?"
+3) "Is it going to rain in SOMECITY today?"
+4) "How cold will it get in SOMECITY this week?"
+5) "How cold will it get in SOMECITY today?"
+6) "How hot will it get in SOMECITY this week?"
+7) "How hot will it get in SOMECITY today?"
 
 Moreover, the chatbot supports caching. This means that once a request has been made, it will be stored locally (even across sessions). This will make response time for duplicate queries fast.
 
