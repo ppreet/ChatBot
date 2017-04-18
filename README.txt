@@ -1,11 +1,18 @@
 Written by Preet Patel (ppreet) for SI 106 Final Project, Winter 2017
 UMID: 56314371
 
+---FILES INCLUDED---
+
+1) chatbot.py - The driver for the chatbot program.
+2) cache.json - A partially filled cache for the chatbot. As submitted, the cache contains data about Paris and Chicago.
+3) README.txt - This file, which contains information about the chatbot.
+
+
 ---INSTRUCTIONS---
 
 The chatbot can be run using the command: "python chatbot.py". Note that this works only with Python2.
 
-Besides the interactions pre-loaded in the AIML templates, the chatbot can answer four other queries for the purpose of this project. These are:
+Besides the interactions pre-loaded in the AIML templates, the chatbot can answer seven other queries for the purpose of this project. These are:
 1) "What's the weather like in SOMECITY?"
 2) "Is it going to rain in SOMECITY this week?"
 3) "Is it going to rain in SOMECITY today?"
@@ -20,7 +27,7 @@ The chatbot can be exited by entering the input "exit".
 
 
 ---SAMPLE INTERACTIONS (ON 31, MARCH 2017)---
-(These may vary, since live data is involved)
+(These may vary, since live data is involved. These responses do not reflect what the submitted cache holds.)
 
 Query:    "What's the weather like in Paris?"
 Response: "In Paris, it is 46.29 and Windy and Partly Cloudy"
@@ -46,12 +53,12 @@ A. API Failure information:
         2) Error Message: "Sorry, I don't know"        
             - If the request to the DarkSky API fails
             - If the DarkSky API returns a response, but it is either incomplete or lacking
-    Note that queries need to be drastically incorrect to throw an error. For example, searching for weather in "somecity" will return a valid result since the APIs correct some queries on their side. Searching for weather in "asdfgh", on the other hand, will throw an error.
+    Note that queries need to be drastically incorrect to throw an error. For example, searching for weather in "asdk" will return a valid result since the APIs correct some queries on their side. Searching for weather in "asdfgh", on the other hand, will throw an error.
     No other error is accounted for.
 
 B. Computing Rain Probability:
     The spec does not tell us where the equality lies in the "Computing Rain Probability" section intervals. I have arbitrarily assigned equality on the lower side. In other words, the intervals are: [0.0, 0.1), [0.1, 0.5), [0.5, 0.9), [0.9, inf).  
 
 C. Caching:
-    Both the Google Geocoding and the DarkSky APIs have been cached. This means that once a particular request has been made, the result will be cached. Although this makes the program faster, it has the side effect that the weather will not be updated if you make a duplicate query. Note that this caching will persist even across sessions.
-    To clear the cache, either run the command "rm cache.json" in the terminal or delete the file "cache.json" from the directory. Also note that queries that throw an error will not be cached. 
+    Both the Google Geocoding and the DarkSky APIs have been cached. This means that once a particular request has been made, the result will be cached. Although this makes the program faster, it has the side effect that the weather will not be updated if you make a duplicate query. Note that this caching will persist even across sessions. Also note that queries that return errors will not be cached.
+    To clear the cache, either run the command "rm cache.json" in the terminal or delete the file "cache.json" from the directory. 
