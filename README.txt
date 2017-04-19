@@ -1,5 +1,4 @@
-Written by Preet Patel (ppreet) for SI 106 Final Project, Winter 2017
-UMID: 56314371
+Written by Preet Patel (ppreet) 
 
 ---FILES INCLUDED---
 
