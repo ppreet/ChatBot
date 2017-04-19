@@ -39,25 +39,3 @@ Response: "It probably will rain in Tokyo"
 
 Query:    "exit"
 Response: ChatBot exits
-
-
----OTHER INFORMATION FOR GRADERS---
-
-A. API Failure information: 
-    Error messages will be displayed in cases:
-        1) Error Message: "Is SOMECITY a city?"
-            - If the request to the Google Geocoding API fails
-            - If the Google Geocoding API returns a response, but it is either incomplete or lacking (mostly because the input city was invalid)
-
-        2) Error Message: "Sorry, I don't know"        
-            - If the request to the DarkSky API fails
-            - If the DarkSky API returns a response, but it is either incomplete or lacking
-    Note that queries need to be drastically incorrect to throw an error. For example, searching for weather in "asdk" will return a valid result since the APIs correct some queries on their side. Searching for weather in "asdfgh", on the other hand, will throw an error.
-    No other error is accounted for.
-
-B. Computing Rain Probability:
-    The spec does not tell us where the equality lies in the "Computing Rain Probability" section intervals. I have arbitrarily assigned equality on the lower side. In other words, the intervals are: [0.0, 0.1), [0.1, 0.5), [0.5, 0.9), [0.9, inf).  
-
-C. Caching:
-    Both the Google Geocoding and the DarkSky APIs have been cached. This means that once a particular request has been made, the result will be cached. Although this makes the program faster, it has the side effect that the weather will not be updated if you make a duplicate query. Note that this caching will persist even across sessions. Also note that queries that return errors will not be cached.
-    To clear the cache, either run the command "rm cache.json" in the terminal or delete the file "cache.json" from the directory. 
